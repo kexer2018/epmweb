@@ -1,0 +1,42 @@
+.main{
+    position: relative;
+    top: 180px;
+}
+
+.main Form{
+    width: 400px;
+    margin: 0 auto;
+}
+
+.main img{
+    width: 100px;
+}
+
+.logo{
+    width: 100px;
+    margin: 0 auto;
+    padding-bottom: 50px;
+}
+
+/* .Item{
+    display: block;
+    width: 100%;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.43;
+    color: #555;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+} */
+
+.main Link{
+    margin-top: 20px;
+    text-align: center;
+    font-weight: bold;
+    border-bottom: 1px solid #000;
+    color: #000;
+    cursor: pointer;
+    padding: 5px;
+
+}

@@ -1,0 +1,56 @@
+.main{
+    position: relative;
+    z-index: 2;
+}
+
+.main p{
+    margin-top: 0;
+    margin-bottom: 1.46em;
+}
+
+.main strong{
+    font-weight: 700;
+}
+
+.main code{
+    padding: 2px 4px;
+    font-size: 95%;
+    color: #c7254e;
+    background-color: #f9f2f4;
+    border-radius: 4px;
+}
+
+.main h2{
+    font-size: 1.5em;
+    margin: 0.83em 0;
+    font-family: "-apple-system-headline", "Georgia", "Xin Gothic", "Hiragino Sans GB", "Droid Sans Fallback", "Microsoft YaHei", "SimSun", sans-serif;
+}
+
+.main h3{
+    font-size: 1.17em;
+    margin: 1em 0;
+    font-family: "-apple-system-headline", "Georgia", "Xin Gothic", "Hiragino Sans GB", "Droid Sans Fallback", "Microsoft YaHei", "SimSun", sans-serif;
+}
+
+.main pre{
+    background: white;
+    font-family: "Menlo, 'Bitstream Vera Sans Mono', 'DejaVu Sans Mono', Monaco, Consolas, monospace";
+    font-size: 12px;
+    line-height: 1.5;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 20px;
+    margin-top: 30px;
+    border-radius: 6px;
+}
+.main pre code{
+    padding: 0;
+    font-size: inherit;
+    color: #999988;
+    white-space: pre-wrap;
+    background-color: transparent;
+    border-radius: 0;
+}
+.pln{
+    color: #333333;
+}
