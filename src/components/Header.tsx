@@ -73,7 +73,7 @@ export default function Header ({ title, themeMode, setThemeMode }: any) {
               preview={false}
               style={{ marginRight: 8 }}
               onClick={() => {
-                window.location.reload()
+                router.push('/')
               }}
             />
           </Link>
@@ -103,14 +103,6 @@ export default function Header ({ title, themeMode, setThemeMode }: any) {
             />
           </AutoComplete>
         </span>
-        {/* <Button
-          size='large'
-          onClick={() => {
-            router.push('/login')
-          }}
-        >
-          Sign In
-        </Button> */}
         <Login/>
         <span style={{ marginRight: 16 }}>
           <Segmented

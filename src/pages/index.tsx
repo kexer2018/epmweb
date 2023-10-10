@@ -1,5 +1,4 @@
 import React from 'react';
-import { Image } from 'antd';
 import styles from './page.module.css';
 import 'antd/dist/reset.css';
 import Footer from '@/components/Footer';

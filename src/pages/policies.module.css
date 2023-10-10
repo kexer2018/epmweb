@@ -1,0 +1,47 @@
+.container {
+  width: 1170px;
+  min-width: 960px;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: 'San Francisco', 'Helvetica Neue', Helvetica, Tahoma, Arial,
+    'PingFang SC', 'Hiragino Sans GB', 'Heiti SC', 'Microsoft YaHei',
+    'WenQuanYi Micro Hei', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #666;
+}
+
+.yue p {
+  margin-top: 0;
+  margin-bottom: 1.46em;
+}
+
+.yue h2 {
+  font-size: 1.5em;
+  margin: 0.83em, 0;
+  font-family: '-apple-system-headline', 'Georgia', 'Xin Gothic',
+    'Hiragino Sans GB', 'Droid Sans Fallback', 'Microsoft YaHei', 'SimSun',
+    sans-serif;
+  color: #222223;
+}
+
+.yue ul {
+  list-style-type: square;
+}
+
+.yue ul li {
+  margin-bottom: 0.2em;
+}
+
+.container Footer {
+  text-align: center;
+  font-size: 14px;
+  padding-bottom: 15px;
+}
+
+.container Header {
+  margin: 30px 0;
+  height: 80px;
+}
