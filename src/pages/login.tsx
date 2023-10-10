@@ -3,6 +3,7 @@ import { Button, Form, Input } from 'antd'
 import styles from './login.module.css'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useUser,UserProvider } from '@/hooks/useUserContext'
 
 type FieldType = {
   loginName?: string
@@ -12,8 +13,12 @@ type FieldType = {
 export default function Login () {
   const router = useRouter()
   const [message, setMessage] = useState('')
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const { setUser } = useUser()
 
   const onFinish = (values: object) => {
+    setUser({username})
     fetch('https://api.t.e0a.cc/user/login', {
       method: 'POST',
       headers: {
@@ -49,6 +54,8 @@ export default function Login () {
       })
   }
 
+  const saveName = (event: any) => {}
+
   return (
     <div className={styles.main}>
       <div className={styles.logo}>
@@ -71,7 +78,10 @@ export default function Login () {
           name='loginName'
           rules={[{ required: true, message: 'Please input your username!' }]}
         >
-          <Input onBlur={checkUser} />
+          <Input
+            onBlur={checkUser}
+            onChange={e => setUsername(e.target.value)}
+          />
         </Form.Item>
 
         <Form.Item<FieldType>
@@ -79,7 +89,7 @@ export default function Login () {
           name='password'
           rules={[{ required: true, message: 'Please input your password!' }]}
         >
-          <Input.Password />
+          <Input.Password onChange={e => setPassword(e.target.value)} />
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
@@ -95,3 +105,4 @@ export default function Login () {
     </div>
   )
 }
+

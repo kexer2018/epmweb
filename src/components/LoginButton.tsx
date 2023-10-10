@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, Dropdown, Image } from 'antd'
 import type { MenuProps } from 'antd'
 import {
@@ -9,16 +9,19 @@ import {
   DatabaseOutlined
 } from '@ant-design/icons'
 import Link from 'next/link'
+import { useUser } from '@/hooks/useUserContext'
 
 export default function Login () {
   let token = null
   if (typeof localStorage !== 'undefined') {
     token = localStorage.getItem('token')
   }
+
+  const { user } = useUser()
   const items: MenuProps['items'] = [
     {
       key: '1',
-      label: <span>zhang xiao</span>,
+      label: <span>{user?.username}</span>,
       icon: <UserOutlined />
     },
     {
@@ -26,15 +29,7 @@ export default function Login () {
     },
     {
       key: '2',
-      label: (
-        <a
-          target='_blank'
-          rel='noopener noreferrer'
-          href='https://www.aliyun.com'
-        >
-          Packages
-        </a>
-      ),
+      label: <a href='https://www.aliyun.com'>Packages</a>,
       icon: <AppstoreOutlined />
     },
     {
