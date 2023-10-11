@@ -1,27 +1,34 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button, Dropdown, Image } from 'antd'
 import type { MenuProps } from 'antd'
 import {
   LogoutOutlined,
   AppstoreOutlined,
   UserOutlined,
-  SettingOutlined,
   DatabaseOutlined
 } from '@ant-design/icons'
 import Link from 'next/link'
-import { useUser } from '@/hooks/useUserContext'
 
 export default function Login () {
-  let token = null
-  if (typeof localStorage !== 'undefined') {
-    token = localStorage.getItem('token')
-  }
+  const [loggedIn, setLoggedIn] = useState(false)
+  const [username, setUserName] = useState('')
 
-  const { user } = useUser()
+  useEffect(() => {
+    let user = localStorage.getItem('user')
+    let token = localStorage.getItem('token')
+    if (!token) {
+      setLoggedIn(false)
+    } else if (token && user) {
+      const username = JSON.parse(user)?.username
+      setUserName(username)
+      setLoggedIn(true)
+    }
+  }, [])
+
   const items: MenuProps['items'] = [
     {
       key: '1',
-      label: <span>{user?.username}</span>,
+      label: <span>{username}</span>,
       icon: <UserOutlined />
     },
     {
@@ -36,23 +43,10 @@ export default function Login () {
       type: 'divider'
     },
     {
-      key: '3',
-      label: (
-        <a
-          target='_blank'
-          rel='noopener noreferrer'
-          href='https://www.aliyun.com'
-        >
-          Account
-        </a>
-      ),
-      icon: <SettingOutlined />
-    },
-    {
       type: 'divider'
     },
     {
-      key: '4',
+      key: '3',
       label: (
         <a
           target='_blank'
@@ -77,7 +71,7 @@ export default function Login () {
       }
     }
   ]
-  return token ? (
+  return loggedIn ? (
     <Dropdown menu={{ items }} placement='bottom' arrow>
       <Image
         src='https://epm.t.e0a.cc/images/default_avatar.png'

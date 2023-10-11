@@ -1,44 +1,44 @@
-import React from 'react';
-import 'antd/dist/reset.css';
-import Footer from '@/components/Footer';
-import { ThemeMode, ThemeProvider as _ThemeProvider } from 'antd-style';
-import { useTheme } from '@/hooks/useTheme';
-import { useRouter } from 'next/router';
-import SearchBox from '@/components/SearchBox';
-import SizeContainer from '@/components/SizeContainer';
-import { SearchItem, useCachedSearch } from '@/hooks/useSearch';
-import { Col, Empty, Pagination, Row, Space } from 'antd';
-import { PackageCard } from '@/components/PackageCard';
-import { NextPageContext } from 'next';
+import React from 'react'
+import 'antd/dist/reset.css'
+import Footer from '@/components/Footer'
+import { ThemeMode, ThemeProvider as _ThemeProvider } from 'antd-style'
+import { useTheme } from '@/hooks/useTheme'
+import { useRouter } from 'next/router'
+import SearchBox from '@/components/SearchBox'
+import SizeContainer from '@/components/SizeContainer'
+import { SearchItem, useCachedSearch } from '@/hooks/useSearch'
+import { Col, Empty, Pagination, Row, Space } from 'antd'
+import { PackageCard } from '@/components/PackageCard'
+import { NextPageContext } from 'next'
 
-const ThemeProvider = _ThemeProvider as any;
+const ThemeProvider = _ThemeProvider as any
 
 type PageType = {
-  page: number;
-  q: string;
-};
+  page: number
+  q: string
+}
 
 const LOAD_PACKAGES: SearchItem[] = new Array(12).fill({
   package: {
     name: '',
-    version: '',
+    version: ''
   }
-});
+})
 
-export default function Packages({page: initPage, q: initQ}: PageType) {
+export default function Packages ({ page: initPage, q: initQ }: PageType) {
   // 统一通过 router.query.q 获取搜索词
   // initQ 和 initPage 是分页关键词
-  const router = useRouter();
+  const router = useRouter()
   const {
-    query: { q = initQ, page = initPage },
-  } = router;
+    query: { q = initQ, page = initPage }
+  } = router
 
-  const [themeMode, setThemeMode] = useTheme();
+  const [themeMode, setThemeMode] = useTheme()
 
   const { data: searchResult, isLoading } = useCachedSearch({
     keyword: q as string,
-    page: Number(page || 1),
-  });
+    page: Number(page || 1)
+  })
 
   return (
     <ThemeProvider themeMode={themeMode as ThemeMode}>
@@ -46,15 +46,11 @@ export default function Packages({page: initPage, q: initQ}: PageType) {
         <SearchBox
           defaultSearch={q as string}
           searchResult={searchResult}
-          onSearch={(search) => {
+          onSearch={search => {
             // 重置分页信息
-            router.replace(
-              `${router.pathname}?q=${search}`,
-              undefined,
-              {
-                shallow: true,
-              }
-            );
+            router.replace(`${router.pathname}?q=${search}`, undefined, {
+              shallow: true
+            })
           }}
         ></SearchBox>
 
@@ -74,7 +70,7 @@ export default function Packages({page: initPage, q: initQ}: PageType) {
                       key={item.package?.name || index}
                     />
                   </Col>
-                );
+                )
               })
             ) : (
               <Empty
@@ -91,14 +87,14 @@ export default function Packages({page: initPage, q: initQ}: PageType) {
               total={Math.min(searchResult?.total as number, 9999 - 12)}
               pageSize={12}
               showSizeChanger={false}
-              onChange={(newPage) => {
+              onChange={newPage => {
                 router.replace(
                   `${router.pathname}?q=${q}&page=${newPage}`,
                   undefined,
                   {
-                    shallow: true,
+                    shallow: true
                   }
-                );
+                )
               }}
             />
           )}
@@ -106,10 +102,10 @@ export default function Packages({page: initPage, q: initQ}: PageType) {
       </SizeContainer>
       <Footer />
     </ThemeProvider>
-  );
+  )
 }
 
-export async function getServerSideProps(context: NextPageContext) {
-  const { page = 1, q = ''} = context.query;
-  return { props: { page, q } };
+export async function getServerSideProps (context: NextPageContext) {
+  const { page = 1, q = '' } = context.query
+  return { props: { page, q } }
 }

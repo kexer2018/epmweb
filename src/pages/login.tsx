@@ -3,7 +3,6 @@ import { Button, Form, Input } from 'antd'
 import styles from './login.module.css'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useUser,UserProvider } from '@/hooks/useUserContext'
 
 type FieldType = {
   loginName?: string
@@ -15,10 +14,9 @@ export default function Login () {
   const [message, setMessage] = useState('')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const { setUser } = useUser()
 
   const onFinish = (values: object) => {
-    setUser({username})
+    localStorage.setItem('user', JSON.stringify({ username, password }))
     fetch('https://api.t.e0a.cc/user/login', {
       method: 'POST',
       headers: {
@@ -53,8 +51,6 @@ export default function Login () {
         }
       })
   }
-
-  const saveName = (event: any) => {}
 
   return (
     <div className={styles.main}>
@@ -105,4 +101,3 @@ export default function Login () {
     </div>
   )
 }
-
