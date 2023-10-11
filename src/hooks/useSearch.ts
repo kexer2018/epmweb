@@ -1,6 +1,6 @@
 'use client'
-import { useEffect, useState } from 'react';
-import useSWR from 'swr';
+import { useEffect, useState } from 'react'
+import useSWR from 'swr'
 
 export interface SearchResult {
   objects: SearchItem[]
@@ -13,13 +13,13 @@ export interface SearchItem {
 }
 
 export type SearchResultWithPage<T> = {
-  data: T[];
+  data: T[]
   page: {
-    total: number;
-    current: number;
-    pageSize: number;
-  };
-};
+    total: number
+    current: number
+    pageSize: number
+  }
+}
 
 export interface SearchPackageResult {
   name: string
@@ -32,8 +32,8 @@ export interface SearchPackageResult {
   license: string
   maintainers: Maintainer[]
   author: Author
-  "dist-tags": Record<string, string>;
-  date: Date;
+  'dist-tags': Record<string, string>
+  date: Date
   created: string
   modified: string
   _source_registry_name: string
@@ -62,38 +62,45 @@ export interface Downloads {
   all: number
 }
 
-
-function useDebounce(value: string, delay: number) {
-  const [debouncedValue, setDebouncedValue] = useState(value);
+function useDebounce (value: string, delay: number) {
+  const [debouncedValue, setDebouncedValue] = useState(value)
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
+      setDebouncedValue(value)
+    }, delay)
 
     return () => {
-      clearTimeout(timer);
-    };
-  }, [value, delay]);
+      clearTimeout(timer)
+    }
+  }, [value, delay])
 
-  return debouncedValue;
+  return debouncedValue
 }
 
-async function fetcher([k, p]: [string, number]) {
-  const res = await fetch(`https://registry.npmmirror.com/-/v1/search?text=${k}&size=12&from=${(p - 1) * 12}`, {
-    method: 'GET',
-  });
-  return await res.json();
+async function fetcher ([k, p]: [string, number]){
+  const res = await fetch(
+    `https://registry.npmmirror.com/-/v1/search?text=${k}&size=12&from=${
+      (p - 1) * 12
+    }`,
+    {
+      method: 'GET'
+    }
+  )
+  return await res.json()
 }
 
-export function useCachedSearch({
+export function useCachedSearch ({
   keyword,
-  page = 0,
+  page = 0
 }: {
-  keyword: string;
-  page?: number;
+  keyword: string
+  page?: number
 }) {
-  const debouncedKeyword = useDebounce(keyword, 300);
+  const debouncedKeyword = useDebounce(keyword, 300)
 
-  return useSWR<SearchResult>(debouncedKeyword ? [debouncedKeyword, page] : null, fetcher);
+  return useSWR<SearchResult>(
+    debouncedKeyword ? [debouncedKeyword, page] : null,
+    fetcher as any
+  )
 }

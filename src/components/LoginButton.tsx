@@ -36,11 +36,8 @@ export default function Login () {
     },
     {
       key: '2',
-      label: <a href='https://www.aliyun.com'>Packages</a>,
+      label: <Link href='/user/packages'>Packages</Link>,
       icon: <AppstoreOutlined />
-    },
-    {
-      type: 'divider'
     },
     {
       type: 'divider'
@@ -62,7 +59,7 @@ export default function Login () {
       type: 'divider'
     },
     {
-      key: '5',
+      key: '4',
       label: <span>Sign Out</span>,
       icon: <LogoutOutlined />,
       onClick: () => {

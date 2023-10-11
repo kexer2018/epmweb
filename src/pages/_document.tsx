@@ -16,7 +16,7 @@ const MyDocument = () => (
         }}
       />
     </Head>
-    <body style={{ minWidth: 1280 }}>
+    <body style={{ minWidth: 1280,margin:0 }}>
       <Main />
       <NextScript />
     </body>

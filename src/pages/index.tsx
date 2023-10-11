@@ -8,6 +8,7 @@ import Contact from '@/components/Contact'
 import { ThemeMode, ThemeProvider as _ThemeProvider } from 'antd-style'
 import Header from '@/components/Header'
 import { useTheme } from '@/hooks/useTheme'
+import { Divider } from 'antd'
 
 const ThemeProvider = _ThemeProvider as any
 
@@ -32,6 +33,7 @@ export default function Home () {
         </main>
         <Contact />
         <MainContent />
+        <Divider />
         <Footer />
       </div>
     </ThemeProvider>
