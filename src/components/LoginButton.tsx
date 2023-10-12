@@ -44,15 +44,7 @@ export default function Login () {
     },
     {
       key: '3',
-      label: (
-        <a
-          target='_blank'
-          rel='noopener noreferrer'
-          href='https://www.aliyun.com'
-        >
-          Access Tokens
-        </a>
-      ),
+      label: <Link href='/user/tokens'> Access Tokens</Link>,
       icon: <DatabaseOutlined />
     },
     {

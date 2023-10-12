@@ -48,16 +48,18 @@ export default function Contact () {
     combine.push([data[i], values[i]])
   }
   return (
-    <List
-      className={styles.list}
-      bordered
-      dataSource={combine}
-      renderItem={item => (
-        <List.Item>
-          <div>{item[0]}</div>
-          <div>{item[1]}</div>
-        </List.Item>
-      )}
-    />
+    <div className= {styles.list}>
+      <List
+        bordered
+        style={{backgroundColor:'#fff'}}
+        dataSource={combine}
+        renderItem={item => (
+          <List.Item>
+            <div>{item[0]}</div>
+            <div>{item[1]}</div>
+          </List.Item>
+        )}
+      />
+    </div>
   )
 }

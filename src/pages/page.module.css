@@ -3,3 +3,9 @@
   margin: 0 auto;
   width: 1140px;
 }
+
+.banner{
+  position: absolute;
+  z-index: -1;
+  width: 1920px;
+}

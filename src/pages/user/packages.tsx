@@ -1,59 +1,76 @@
 import React from 'react'
-import { Layout, Space, Divider, Image } from 'antd'
+import { Layout, Space, Divider, Image, theme } from 'antd'
 import { ThemeMode, ThemeProvider as _ThemeProvider } from 'antd-style'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { useTheme } from '@/hooks/useTheme'
+import { createStyles } from 'antd-style'
 
 const { Sider, Content } = Layout
-
-const layoutStyle: React.CSSProperties = {
-  display: 'flex',
-  paddingTop: 50
-}
-
-const contentStyle: React.CSSProperties = {
-  textAlign: 'center',
-  minHeight: 120,
-  lineHeight: '120px',
-  color: '#fff',
-  backgroundColor: '#108ee9'
-}
-
-const siderStyle: React.CSSProperties = {
-  width: 300,
-  backgroundColor: '#fff'
-}
-
-const footerStyle: React.CSSProperties = {
-  textAlign: 'center',
-  color: '#fff',
-  backgroundColor: '#7dbcea'
-}
-
 const ThemeProvider = _ThemeProvider as any
 
 export default function UserPackage () {
   const [themeMode, setThemeMode] = useTheme()
+  const {
+    token: { colorBgContainer }
+  } = theme.useToken()
+
+  const userStyles = createStyles(({ css }) => {
+    return {
+      container: css`
+        width: 1170px;
+        min-width: 960px;
+        padding-left: 15px;
+        padding-right: 15px;
+        margin-left: auto;
+        margin-right: auto;
+        display: flex;
+        flex-direction: column;
+        background-color: #fff;
+      `,
+      layout: css`
+        display: flex;
+        padding-top: 80px;
+        background-color: #fff;
+      `
+    }
+  })
+
+  const { styles } = userStyles()
+
   return (
     <ThemeProvider themeMode={themeMode as ThemeMode}>
       <Space direction='vertical' style={{ width: '100%' }}>
-        <Layout>
+        <Layout className={styles.container}>
           <Header themeMode={themeMode} setThemeMode={setThemeMode} />
-          <Layout style={layoutStyle} hasSider>
-            <Sider style={siderStyle}>
+          <Layout hasSider className={styles.layout}>
+            <Sider style={{ background: colorBgContainer }} width={300}>
+              <Image
+                src='https://epm.edgeros.com/images/default_avatar.png'
+                alt='avatar'
+                preview={false}
+                width={200}
+                height={200}
+                style={{ margin: '0 50px' }}
+              />
               <div style={{ width: 200, height: 200, margin: '0 50px' }}>
-                <Image
-                  src='https://epm.edgeros.com/images/default_avatar.png'
-                  alt='avatar'
-                  preview={false}
-                  width={200}
-                  height={200}
-                />
+                <h1>username</h1>
+                <div>
+                  <h3>Email</h3>
+                  <p>email</p>
+                </div>
+                <div>
+                  <h3>Scope</h3>
+                  <p>@edgeros</p>
+                </div>
               </div>
-              <div style={{ width: 200, height: 200, margin: '0 50px' }}></div>
             </Sider>
-            <Content style={contentStyle}>Content</Content>
+            <Content>
+              {/* 这里的包的信息全部从数据库中获取 */}
+      
+
+
+            </Content>
           </Layout>
           <Divider />
           <Footer />
