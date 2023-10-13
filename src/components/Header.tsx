@@ -8,9 +8,18 @@ import { createStyles } from 'antd-style'
 
 const userInfo = () => ({ user: null, loading: false })
 
-export default function Header ({ title, themeMode, setThemeMode }: any) {
+export default function Header ({
+  title,
+  themeMode,
+  setThemeMode,
+  isHome
+}: any) {
   const [search, setSearch] = useState('')
   const router = useRouter()
+
+  const imageUrl = isHome
+    ? '	https://epm.edgeros.com/images/epm_logo_black.png'
+    : 'https://epm.edgeros.com/images/logo.png'
 
   const { data: searchResult, isLoading } = useCachedSearch({
     keyword: search,
@@ -58,7 +67,7 @@ export default function Header ({ title, themeMode, setThemeMode }: any) {
   return (
     <nav className={styles.container}>
       <Image
-        src='	https://epm.edgeros.com/images/epm_logo_black.png'
+        src={imageUrl}
         width={184}
         alt='logo'
         preview={false}

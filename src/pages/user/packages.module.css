@@ -1,0 +1,21 @@
+
+.container {
+  width: 1170px;
+  min-width: 960px;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  background-color: none;
+}
+
+.layout {
+  display: flex;
+  padding-top: 80px;
+}
+
+.container Sider {
+  background-color: none;
+}

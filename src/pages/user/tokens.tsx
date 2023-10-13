@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Layout, Space, Divider, theme, Button, Radio, Table } from 'antd'
+import React, { useState, useEffect } from 'react'
+import { Layout, Space, Divider, Button, Table } from 'antd'
 import { ThemeMode, ThemeProvider as _ThemeProvider } from 'antd-style'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
@@ -78,22 +78,6 @@ const data: DataType[] = [
   }
 ]
 
-
-
-// const rowSelection = {
-//   onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
-//     console.log(
-//       `selectedRowKeys: ${selectedRowKeys}`,
-//       'selectedRows: ',
-//       selectedRows
-//     )
-//   },
-//   getCheckboxProps: (record: DataType) => ({
-//     disabled: record.name === 'Disabled User', // Column configuration not to be checked
-//     name: record.name
-//   })
-// }
-
 export default function UserTokens () {
   const [themeMode, setThemeMode] = useTheme()
   const userStyles = createStyles(({ css }) => {
@@ -107,49 +91,57 @@ export default function UserTokens () {
         margin-right: auto;
         display: flex;
         flex-direction: column;
-        background-color: #fff;
-      `,
-      layout: css`
-        display: flex;
-        padding-top: 50px;
-        background-color: #fff;
       `
     }
   })
 
   const { styles } = userStyles()
   const router = useRouter()
+  const isLoading = true
 
   return (
     <ThemeProvider themeMode={themeMode as ThemeMode}>
       <Space direction='vertical' style={{ width: '100%' }}>
         <Layout className={styles.container}>
-          <Header themeMode={themeMode} setThemeMode={setThemeMode} />
-
+          <Header
+            isHome={false}
+            themeMode={themeMode}
+            setThemeMode={setThemeMode}
+          />
           <div style={{ padding: 40 }}>
             <div>
               <h1>Access Tokens</h1>
-              <Button
-                size='large'
-                onClick={() => {
-                  router.push('/user/tokens-new')
+              <div
+                style={{
+                  display: 'flex',
+                  width: '40%',
+                  justifyContent: 'space-between'
                 }}
               >
-                Generate New Token
-              </Button>
-              <Button
-                size='large'
-                onClick={() => {
-                  router.push('/')
-                }}
-              >
-                Delete Selected Tokens
-              </Button>
+                <Button
+                  size='large'
+                  onClick={() => {
+                    router.push('/user/tokens-new')
+                  }}
+                >
+                  Generate New Token
+                </Button>
+                <Button
+                  size='large'
+                  onClick={() => {
+                    router.push('/')
+                  }}
+                >
+                  <span style={{ color: 'red' }}>Delete Selected Tokens</span>
+                </Button>
+              </div>
             </div>
             <Divider />
+
+            {/* {isLoading ? <Button></Button> : <div></div>} */}
             <Table
               rowSelection={{
-                type: 'checkbox',
+                type: 'checkbox'
               }}
               columns={columns}
               dataSource={data}

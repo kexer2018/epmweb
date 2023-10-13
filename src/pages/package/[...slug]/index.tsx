@@ -10,7 +10,6 @@ import Footer from '@/components/Footer'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import { Result, Spin } from 'antd'
-import Header from '@/components/Header'
 import { useTheme } from '@/hooks/useTheme'
 
 const DEFAULT_TYPE = 'home'

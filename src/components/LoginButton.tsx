@@ -8,10 +8,12 @@ import {
   DatabaseOutlined
 } from '@ant-design/icons'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 export default function Login () {
   const [loggedIn, setLoggedIn] = useState(false)
   const [username, setUserName] = useState('')
+  const router = useRouter()
 
   useEffect(() => {
     let user = localStorage.getItem('user')
@@ -55,8 +57,11 @@ export default function Login () {
       label: <span>Sign Out</span>,
       icon: <LogoutOutlined />,
       onClick: () => {
+        router.push('/')
         localStorage.removeItem('token')
-        window.location.reload()
+        setTimeout(() => {
+          window.location.reload()
+        }, 100)
       }
     }
   ]

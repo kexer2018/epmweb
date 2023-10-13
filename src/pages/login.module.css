@@ -1,6 +1,9 @@
 .main{
     position: relative;
     top: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .main Form{
@@ -18,7 +21,7 @@
     padding-bottom: 50px;
 }
 
-.main Link{
+.link{
     margin-top: 20px;
     text-align: center;
     font-weight: bold;
@@ -26,5 +29,7 @@
     color: #000;
     cursor: pointer;
     padding: 5px;
+    display: flex;
+    justify-content: center;
 
 }

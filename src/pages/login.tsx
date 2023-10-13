@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Form, Input } from 'antd'
+import { Button, Form, Input, Image } from 'antd'
 import styles from './login.module.css'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -55,14 +55,26 @@ export default function Login () {
   return (
     <div className={styles.main}>
       <div className={styles.logo}>
-        <img src='https://epm.t.e0a.cc/images/login_logo.png' alt='logo' />
+        <Image
+          src='https://epm.t.e0a.cc/images/login_logo.png'
+          alt='logo'
+          height={110}
+          width={100}
+          preview={false}
+        />
       </div>
-      <div></div>
-      <div>
-        <textarea name='meaasge' id='meaasge' value={message}></textarea>
+      <div
+        style={{
+          height: 45,
+          display:'flex',
+          justifyContent:'center'
+        }}
+      >
+        <span style={{ color: 'red' }}>{message}</span>
       </div>
       <Form
         name='basic'
+        layout='vertical'
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
         initialValues={{ remember: true }}
@@ -73,8 +85,10 @@ export default function Login () {
           label='Username'
           name='loginName'
           rules={[{ required: true, message: 'Please input your username!' }]}
+          style={{ fontSize: 16, fontWeight: 700 }}
         >
           <Input
+            style={{ height: 45, width: 400 }}
             onBlur={checkUser}
             onChange={e => setUsername(e.target.value)}
           />
@@ -84,19 +98,28 @@ export default function Login () {
           label='Password'
           name='password'
           rules={[{ required: true, message: 'Please input your password!' }]}
+          style={{ fontSize: 16, fontWeight: 700 }}
         >
-          <Input.Password onChange={e => setPassword(e.target.value)} />
+          <Input.Password
+            style={{ height: 45, width: 400 }}
+            onChange={e => setPassword(e.target.value)}
+          />
         </Form.Item>
 
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type='primary' htmlType='submit'>
+        <Form.Item>
+          <Button
+            type='default'
+            htmlType='submit'
+            style={{ height: 45, width: 400, fontWeight: 'bold' }}
+          >
             Sign In
           </Button>
         </Form.Item>
-
-        <Link href='https://id.t.e0a.cc/register'>
-          Go to the website to register
-        </Link>
+        <div className={styles.link}>
+          <Link href='https://id.t.e0a.cc/register' style={{ color: '#000' }}>
+            Go to the website to register
+          </Link>
+        </div>
       </Form>
     </div>
   )

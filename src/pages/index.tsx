@@ -10,14 +10,10 @@ import Header from '@/components/Header'
 import { useTheme } from '@/hooks/useTheme'
 import { Divider, Image } from 'antd'
 
-
 const ThemeProvider = _ThemeProvider as any
-
-
 
 export default function Home () {
   const [themeMode, setThemeMode] = useTheme()
-
 
   return (
     <ThemeProvider themeMode={themeMode as ThemeMode}>
@@ -26,10 +22,12 @@ export default function Home () {
           src='https://epm.t.e0a.cc/images/banner.png'
           alt='banner'
           width={'100%'}
+          height={889}
         />
       </div>
       <div className={styles.page}>
         <Header
+          isHome={true}
           themeMode={themeMode}
           setThemeMode={setThemeMode}
         />

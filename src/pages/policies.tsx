@@ -12,7 +12,7 @@ export default function Policies () {
   return (
     <ThemeProvider themeMode={themeMode as ThemeMode}>
       <div className={styles.container}>
-        <Header themeMode={themeMode} setThemeMode={setThemeMode} />
+        <Header isHome = {false} themeMode={themeMode} setThemeMode={setThemeMode} />
         <div className={styles.yue}>
           <p>
             EPM is here to support EdgerOS developers who wish to share their

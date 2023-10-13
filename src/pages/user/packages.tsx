@@ -1,50 +1,48 @@
 import React from 'react'
-import { Layout, Space, Divider, Image, theme } from 'antd'
+import { Layout, Space, Divider, Image, List } from 'antd'
 import { ThemeMode, ThemeProvider as _ThemeProvider } from 'antd-style'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { useTheme } from '@/hooks/useTheme'
-import { createStyles } from 'antd-style'
+import styles from './packages.module.css'
 
 const { Sider, Content } = Layout
 const ThemeProvider = _ThemeProvider as any
 
+const data = [
+  {
+    title: '@edgeros/tset-epm',
+    readme: 'tset',
+    latest: '1.0.1',
+    latestTime: '2023-09-15 11:34:24'
+  },
+  {
+    title: '@edgeros/welcome',
+    readme: 'A warm welcome from EdgerOS community!',
+    latest: '0.1.35',
+    latestTime: '2023-08-18 14:16:22'
+  },
+  {
+    title: '@edgeros/fs-async',
+    readme: 'JSRE 运行时,异步文件系统模块。',
+    latest: '0.0.1',
+    latestTime: '2023-09-11 13:37:48'
+  }
+]
+
 export default function UserPackage () {
   const [themeMode, setThemeMode] = useTheme()
-  const {
-    token: { colorBgContainer }
-  } = theme.useToken()
-
-  const userStyles = createStyles(({ css }) => {
-    return {
-      container: css`
-        width: 1170px;
-        min-width: 960px;
-        padding-left: 15px;
-        padding-right: 15px;
-        margin-left: auto;
-        margin-right: auto;
-        display: flex;
-        flex-direction: column;
-        background-color: #fff;
-      `,
-      layout: css`
-        display: flex;
-        padding-top: 80px;
-        background-color: #fff;
-      `
-    }
-  })
-
-  const { styles } = userStyles()
-
   return (
     <ThemeProvider themeMode={themeMode as ThemeMode}>
       <Space direction='vertical' style={{ width: '100%' }}>
         <Layout className={styles.container}>
-          <Header themeMode={themeMode} setThemeMode={setThemeMode} />
+          <Header
+            isHome={false}
+            themeMode={themeMode}
+            setThemeMode={setThemeMode}
+          />
           <Layout hasSider className={styles.layout}>
-            <Sider style={{ background: colorBgContainer }} width={300}>
+            <Sider>
               <Image
                 src='https://epm.edgeros.com/images/default_avatar.png'
                 alt='avatar'
@@ -66,10 +64,31 @@ export default function UserPackage () {
               </div>
             </Sider>
             <Content>
-              {/* 这里的包的信息全部从数据库中获取 */}
-      
-
-
+              {/* 这里的包的信息全部从数据库中获取,先用假数据占位 */}
+              <List
+                itemLayout='horizontal'
+                dataSource={data}
+                renderItem={item => (
+                  <List.Item>
+                    <List.Item.Meta
+                      title={
+                        <a href='##'>
+                          <h1 style={{ color: '#00b', fontSize: '1.8em' }}>
+                            {item.title}
+                          </h1>
+                        </a>
+                      }
+                      description={
+                        <div>
+                          <h3>{item.readme}</h3>
+                          <h3>latest: {item.latest}</h3>
+                          <h3>latestTime: {item.latestTime}</h3>
+                        </div>
+                      }
+                    />
+                  </List.Item>
+                )}
+              />
             </Content>
           </Layout>
           <Divider />
