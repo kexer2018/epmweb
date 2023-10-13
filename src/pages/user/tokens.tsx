@@ -91,7 +91,8 @@ export default function UserTokens () {
         margin-right: auto;
         display: flex;
         flex-direction: column;
-      `
+        background-color: transparent !important;
+        `
     }
   })
 

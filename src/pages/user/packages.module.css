@@ -8,14 +8,17 @@
   margin-right: auto;
   display: flex;
   flex-direction: column;
-  background-color: none;
+  background-color: transparent !important;
 }
 
 .layout {
   display: flex;
   padding-top: 80px;
+  background-color: transparent !important;
 }
 
 .container Sider {
-  background-color: none;
+  background-color: transparent !important;
+  width: 300px;
+  max-width: 300px;
 }
