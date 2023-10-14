@@ -1,10 +1,37 @@
-import React from 'react'
-import { Image, Button } from 'antd'
+import React, { useState, useEffect } from 'react'
+import { Image, Button, Radio } from 'antd'
+import type { RadioChangeEvent } from 'antd'
 import { useRouter } from 'next/router'
 import styles from './token-news.module.css'
 import Link from 'next/link'
 
 export default function NewTokens () {
+  const [value, setValue] = useState('')
+  const [inputVaule, setInputValue] = useState('')
+  const router = useRouter()
+
+  const createToken = () => {
+    try {
+      let token = Date.now() //这个token的方法后续要换一个新的算法，暂时用这个代替
+      // 这个token的值应该存入数据库里，然后渲染的值都从数据库中获取
+      token
+        ? localStorage.setItem(
+            'access-token',
+            JSON.stringify({
+              token: `EPM_${value}_${inputVaule}_${token}`,
+              name: { inputVaule },
+              type: { value }
+            }) 
+          )
+        : null
+    } catch (e: any) {
+      console.error(e.message)
+    }
+    setTimeout(() => {
+      router.push('/user/tokens')
+    })
+  }
+
   return (
     <main className={styles.main}>
       <header>
@@ -27,7 +54,7 @@ export default function NewTokens () {
           </p>
           <div className={styles.inputName}>
             <label>Name</label>
-            <input type='text' />
+            <input type='text' onChange={e => setInputValue(e.target.value)} />
           </div>
           <div>
             <h3>Select type</h3>
@@ -39,48 +66,45 @@ export default function NewTokens () {
               &nbsp;
             </p>
             <div className={styles.select}>
-              <div>
-                <input type='radio' />
-                <label>
-                  <b>Read-only</b>
-                  <br />
-                  <span style={{ paddingBottom: 5 }}>
+              <Radio.Group onChange={e => setValue(e.target.value)}>
+                <div>
+                  <Radio value={'Read-only'}>
+                    <b>Read-only</b>
+                  </Radio>
+                  <span>
                     A read-only token can download public or private packages
                     from the npm registry.
                   </span>
-                </label>
-              </div>
-              <div>
-                <input type='radio' />
-                <label>
-                  <b>Automation</b>
-                  <br />
+                </div>
+                <br />
+                <div>
+                  <Radio value={'Automation'}>
+                    <b>Automation</b>
+                  </Radio>
                   <span>
                     An automation token will &nbsp;<b>bypass</b>&nbsp;
                     two-factor authentication (2FA) when publishing. If you have
                     2FA enabled, you will not be prompted when using an
                     automation token, making it suitable for CI/CD workflows.
                   </span>
-                </label>
-              </div>
-              <div>
-                <input type='radio' />
-                <label>
-                  <b>Publish</b>
-                  <br />
+                </div>
+                <div>
+                  <Radio value={'Publish'}>
+                    <b>Publish</b>
+                  </Radio>
                   <span>
                     A publish token can read and publish packages to the npm
                     registry. If you have 2FA enabled, it will be required when
                     using this token.
                   </span>
-                </label>
-              </div>
+                </div>
+              </Radio.Group>
             </div>
           </div>
           <div>
-            <Link href='/user/tokens'>
-              <Button size='large'>Generate Token</Button>
-            </Link>
+            <Button size='large' onClick={createToken}>
+              Generate Token
+            </Button>
           </div>
         </section>
         <div

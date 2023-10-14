@@ -6,79 +6,109 @@ import Footer from '@/components/Footer'
 import { useTheme } from '@/hooks/useTheme'
 import { createStyles } from 'antd-style'
 import { useRouter } from 'next/router'
-import type { ColumnsType } from 'antd/es/table'
+import { TableRowSelection } from 'antd/lib/table/interface'
 
 const ThemeProvider = _ThemeProvider as any
 
-interface DataType {
-  key: React.Key
+interface DataSourceItem {
+  key: string
   name: string
   type: string
+  token: string
   created: string
   last_used: string
-  delete: any
 }
 
-const columns: ColumnsType<DataType> = [
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    render: (text: string) => <a>{text}</a>
-  },
-  {
-    title: 'Type',
-    dataIndex: 'type'
-  },
-  {
-    title: 'Created',
-    dataIndex: 'created'
-  },
-  {
-    title: 'Last_used',
-    dataIndex: 'last_used'
-  },
-  {
-    title: 'Delete',
-    dataIndex: 'delete'
-  }
-]
-
-const data: DataType[] = [
-  {
-    key: '1',
-    name: 'John Brown',
-    type: 'read-only',
-    created: 'New York No. 1 Lake Park',
-    last_used: '2016-10-03',
-    delete: false
-  },
-  {
-    key: '2',
-    name: 'John Brown',
-    type: 'read-only',
-    created: 'New York No. 1 Lake Park',
-    last_used: '2016-10-05',
-    delete: false
-  },
-  {
-    key: '3',
-    name: 'John Brown',
-    type: 'read-only',
-    created: 'New York No. 1 Lake Park',
-    last_used: '2016-10-06',
-    delete: false
-  },
-  {
-    key: '4',
-    name: 'John Brown',
-    type: 'read-only',
-    created: 'New York No. 1 Lake Park',
-    last_used: '2016-10-09',
-    delete: false
-  }
-]
-
 export default function UserTokens () {
+  const [dataSource, setDataSource] = useState<DataSourceItem[]>([
+    {
+      key: '1',
+      name: 'John Brown',
+      token: '1222222',
+      type: 'read-only',
+      created: 'New York No. 1 Lake Park',
+      last_used: '2016-10-03'
+    },
+    {
+      key: '2',
+      name: 'John Brown',
+      type: 'read-only',
+      token: 'epm_11111',
+      created: 'New York No. 1 Lake Park',
+      last_used: '2016-10-05'
+    },
+    {
+      key: '3',
+      name: 'John Brown',
+      type: 'read-only',
+      token: '@333333s',
+      created: 'New York No. 1 Lake Park',
+      last_used: '2016-10-06'
+    },
+    {
+      key: '4',
+      name: 'John Brown',
+      type: 'read-only',
+      token: 'iopdddddd',
+      created: 'New York No. 1 Lake Park',
+      last_used: '2016-10-09'
+    }
+  ])
+
+  // 记录需要删除的键
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+
+  const [name, setName] = useState('')
+  const [type, setType] = useState('')
+
+
+  // 读取token中的各种数据
+  useEffect(() => {
+    let data = localStorage.getItem('access-token')
+    data ? JSON.parse(data) : null
+  }, [])
+
+  const columns = [
+    {
+      title: 'Name',
+      dataIndex: 'name'
+    },
+    {
+      title: 'Access_Token',
+      dataIndex: 'token'
+    },
+    {
+      title: 'Type',
+      dataIndex: 'type'
+    },
+
+    {
+      title: 'Created',
+      dataIndex: 'created'
+    },
+    {
+      title: 'Last_used',
+      dataIndex: 'last_used'
+    }
+  ]
+
+  // 这个点击之后会触发一个 删除数据库中token值的方法
+
+  const handleDeleteSelected = () => {
+    const updatedDataSource = dataSource.filter(
+      item => !selectedRowKeys.includes(item.key)
+    )
+    setDataSource(updatedDataSource)
+    setSelectedRowKeys([])
+  }
+
+  const rowSelection: TableRowSelection<DataSourceItem> = {
+    selectedRowKeys,
+    onChange: selectedRowKeys => {
+      setSelectedRowKeys(selectedRowKeys)
+    }
+  }
+
   const [themeMode, setThemeMode] = useTheme()
   const userStyles = createStyles(({ css }) => {
     return {
@@ -92,14 +122,13 @@ export default function UserTokens () {
         display: flex;
         flex-direction: column;
         background-color: transparent !important;
-        `
+      `
     }
   })
 
   const { styles } = userStyles()
   const router = useRouter()
-  const isLoading = true
-
+  const hasItem = dataSource.length === 0
   return (
     <ThemeProvider themeMode={themeMode as ThemeMode}>
       <Space direction='vertical' style={{ width: '100%' }}>
@@ -129,9 +158,8 @@ export default function UserTokens () {
                 </Button>
                 <Button
                   size='large'
-                  onClick={() => {
-                    router.push('/')
-                  }}
+                  onClick={handleDeleteSelected}
+                  disabled={selectedRowKeys.length === 0}
                 >
                   <span style={{ color: 'red' }}>Delete Selected Tokens</span>
                 </Button>
@@ -139,14 +167,15 @@ export default function UserTokens () {
             </div>
             <Divider />
 
-            {/* {isLoading ? <Button></Button> : <div></div>} */}
-            <Table
-              rowSelection={{
-                type: 'checkbox'
-              }}
-              columns={columns}
-              dataSource={data}
-            />
+            {hasItem ? (
+              <span>you have no tokens ,create one</span>
+            ) : (
+              <Table<DataSourceItem>
+                rowSelection={rowSelection}
+                columns={columns}
+                dataSource={dataSource}
+              />
+            )}
           </div>
           <Divider />
           <Footer />

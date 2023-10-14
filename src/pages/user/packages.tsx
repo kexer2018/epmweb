@@ -9,6 +9,8 @@ import styles from './packages.module.css'
 const { Content } = Layout
 const ThemeProvider = _ThemeProvider as any
 
+
+// 这些数据都可以从数据库获取，调用一个后端的 函数，获取关于包的信息的值
 const data = [
   {
     title: '@edgeros/tset-epm',
