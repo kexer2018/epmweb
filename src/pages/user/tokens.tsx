@@ -101,14 +101,12 @@ export default function UserTokens () {
     setDataSource(updatedDataSource)
     setSelectedRowKeys([])
   }
-
   const rowSelection: TableRowSelection<DataSourceItem> = {
     selectedRowKeys,
     onChange: selectedRowKeys => {
       setSelectedRowKeys(selectedRowKeys)
     }
   }
-
   const [themeMode, setThemeMode] = useTheme()
   const userStyles = createStyles(({ css }) => {
     return {

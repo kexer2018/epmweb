@@ -4,11 +4,11 @@ import { ThemeMode, ThemeProvider as _ThemeProvider } from 'antd-style'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { useTheme } from '@/hooks/useTheme'
+
 import styles from './packages.module.css'
 
 const { Content } = Layout
 const ThemeProvider = _ThemeProvider as any
-
 
 // 这些数据都可以从数据库获取，调用一个后端的 函数，获取关于包的信息的值
 const data = [
@@ -39,6 +39,7 @@ export default function UserPackage () {
     let user = localStorage.getItem('user')
     user ? setUsername(JSON.parse(user).username) : null
   }, [])
+
   return (
     <ThemeProvider themeMode={themeMode as ThemeMode}>
       <Space direction='vertical' style={{ width: '100%' }}>
