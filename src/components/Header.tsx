@@ -6,14 +6,11 @@ import Link from 'next/link'
 import Login from './LoginButton'
 import { createStyles } from 'antd-style'
 
-const userInfo = () => ({ user: null, loading: false })
+interface HeaderProps {
+  onDataReceived: (data: any) => void
+}
 
-export default function Header ({
-  title,
-  themeMode,
-  setThemeMode,
-  isHome
-}: any) {
+export default function Header ({ themeMode, setThemeMode, isHome }: any) {
   const [search, setSearch] = useState('')
   const router = useRouter()
 
@@ -63,7 +60,6 @@ export default function Header ({
   }, [searchResult])
 
   const { styles } = userStyles()
-
   return (
     <nav className={styles.container}>
       <Image
@@ -100,7 +96,6 @@ export default function Header ({
           />
         </AutoComplete>
       </div>
-
       <Login />
       <Segmented
         value={themeMode}

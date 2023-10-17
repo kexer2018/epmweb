@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Layout, Space, Divider, Image, List } from 'antd'
 import { ThemeMode, ThemeProvider as _ThemeProvider } from 'antd-style'
+import Link from 'next/link'
+import moment from 'moment'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { useTheme } from '@/hooks/useTheme'
@@ -10,35 +12,60 @@ import styles from './packages.module.css'
 const { Content } = Layout
 const ThemeProvider = _ThemeProvider as any
 
-// 这些数据都可以从数据库获取，调用一个后端的 函数，获取关于包的信息的值
-const data = [
-  {
-    title: '@edgeros/tset-epm',
-    readme: 'tset',
-    latest: '1.0.1',
-    latestTime: '2023-09-15 11:34:24'
-  },
-  {
-    title: '@edgeros/welcome',
-    readme: 'A warm welcome from EdgerOS community!',
-    latest: '0.1.35',
-    latestTime: '2023-08-18 14:16:22'
-  },
-  {
-    title: '@edgeros/fs-async',
-    readme: 'JSRE 运行时,异步文件系统模块。',
-    latest: '0.0.1',
-    latestTime: '2023-09-11 13:37:48'
-  }
-]
+const register = 'http://127.0.0.1:7001'
+
+interface PackType {
+  name: string
+  description: string
+  latest: string
+  latestTime: string
+}
 
 export default function UserPackage () {
   const [themeMode, setThemeMode] = useTheme()
-  const [username, setUsername] = useState(null)
+  const [username, setUsername] = useState('')
+  const [pack, setPackage] = useState<Array<PackType>>()
+
   useEffect(() => {
     let user = localStorage.getItem('user')
-    user ? setUsername(JSON.parse(user).username) : null
+    let username = user ? JSON.parse(user).username : null
+    if (username) {
+      setUsername(username)
+      getPackageDetails(username)
+    }
   }, [])
+
+  /**
+   * 获取user的包的信息，在package中展示
+   */
+  let packdetails: Array<PackType> = []
+
+  async function getPackageName (username: string): Promise<string[]> {
+    const packageUrl = `${register}/-/org/${username}/package`
+    const data = await fetch(packageUrl, {
+      method: 'GET'
+    })
+    return Object.keys(await data.json())
+  }
+
+  async function getPackageDetails (username: string) {
+    const packages = await getPackageName(username)
+    const urls = packages.map(pack => (pack = `${register}/${pack}`))
+    const fetchPromises = urls.map(url => fetch(url))
+    const responses = await Promise.all(fetchPromises)
+    const dataPromises = responses.map(response => response.json())
+    const dataArray = await Promise.all(dataPromises)
+    dataArray.forEach(data => {
+      let p = {
+        name: data.name,
+        description: data.description,
+        latest: data['dist-tags'].latest,
+        latestTime: moment(data.time.modified).format('YYYY-MM-DD HH:mm:ss')
+      }
+      packdetails.push(p)
+    })
+    setPackage(packdetails)
+  }
 
   return (
     <ThemeProvider themeMode={themeMode as ThemeMode}>
@@ -73,23 +100,22 @@ export default function UserPackage () {
                 </div>
               </div>
               <Content>
-                {/* 这里的包的信息全部从数据库中获取,先用假数据占位 */}
                 <List
                   itemLayout='horizontal'
-                  dataSource={data}
+                  dataSource={pack}
                   renderItem={item => (
                     <List.Item>
                       <List.Item.Meta
                         title={
-                          <a href='##'>
+                          <Link href={`/package/${item.name}`}>
                             <h1 style={{ color: '#00b', fontSize: '1.8em' }}>
-                              {item.title}
+                              {item.name}
                             </h1>
-                          </a>
+                          </Link>
                         }
                         description={
                           <div>
-                            <h3>{item.readme}</h3>
+                            <h3>{item.description}</h3>
                             <h3>latest: {item.latest}</h3>
                             <h3>latestTime: {item.latestTime}</h3>
                           </div>

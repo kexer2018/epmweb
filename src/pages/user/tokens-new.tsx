@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { Image, Button, Radio } from 'antd'
-import type { RadioChangeEvent } from 'antd'
 import { useRouter } from 'next/router'
 import styles from './token-news.module.css'
 import Link from 'next/link'

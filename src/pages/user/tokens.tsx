@@ -63,10 +63,10 @@ export default function UserTokens () {
 
 
   // 读取token中的各种数据
-  useEffect(() => {
-    let data = localStorage.getItem('access-token')
-    data ? JSON.parse(data) : null
-  }, [])
+  // useEffect(() => {
+  //   let data = localStorage.getItem('access-token')
+  //   data ? JSON.parse(data) : null
+  // }, [])
 
   const columns = [
     {
