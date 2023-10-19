@@ -27,7 +27,7 @@ export default function UserPackage () {
   const [pack, setPackage] = useState<Array<PackType>>()
 
   useEffect(() => {
-    let user = localStorage.getItem('user')
+    let user = localStorage.getItem('access-token')
     let username = user ? JSON.parse(user).username : null
     if (username) {
       setUsername(username)

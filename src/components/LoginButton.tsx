@@ -16,9 +16,9 @@ export default function Login () {
   const router = useRouter()
 
   useEffect(() => {
-    let user = localStorage.getItem('user')
-    user
-      ? (setUserName(JSON.parse(user)?.username), setLoggedIn(true))
+    let access_token = localStorage.getItem('access-token')
+    access_token
+      ? (setUserName(JSON.parse(access_token)?.username), setLoggedIn(true))
       : setLoggedIn(false)
   }, [])
 
@@ -64,7 +64,7 @@ export default function Login () {
       icon: <LogoutOutlined />,
       onClick: () => {
         router.push('/')
-        localStorage.removeItem('token')
+        localStorage.removeItem('access-token')
         setTimeout(() => {
           window.location.reload()
         }, 100)

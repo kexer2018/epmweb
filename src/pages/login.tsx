@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState} from 'react'
 import { Button, Form, Input, Image } from 'antd'
 import styles from './login.module.css'
 import Link from 'next/link'
@@ -12,32 +12,37 @@ type FieldType = {
 const REGISTRY = 'http://127.0.0.1:7001'
 
 export default function Login () {
-
   // 这里直接去调一下后端的登录接口
   const router = useRouter()
   const [message, setMessage] = useState('')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  const onFinish = (values: object) => {
-    localStorage.setItem('user', JSON.stringify({ username, password }))
-    fetch('https://api.t.e0a.cc/user/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(values)
+  const onFinish = async () => {
+    const payload = JSON.stringify({
+      type: 'user',
+      name: username,
+      password: password
     })
-      .then(res => res.json())
-      .then(data => {
-        if (data.status === 200) {
-          router.push('/')
-        } else {
-          setMessage('Password is not correct,Please check your password!!')
-        }
-      })
+    const response = await fetch(
+      `${REGISTRY}/-/user/org.couchdb.user/${username}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: payload
+      }
+    )
+    const p = await response.json()
+    localStorage.setItem(
+      'access-token',
+      JSON.stringify({ access_token: p.token, username })
+    )
+    setTimeout(() => {
+      router.push('/')
+    }, 100)
   }
-
   const checkUser = (event: any) => {
     const value = event.target.value
     fetch(`https://api.t.e0a.cc/user/user/hasUsername?loginName=${value}`, {
@@ -69,8 +74,8 @@ export default function Login () {
       <div
         style={{
           height: 45,
-          display:'flex',
-          justifyContent:'center'
+          display: 'flex',
+          justifyContent: 'center'
         }}
       >
         <span style={{ color: 'red' }}>{message}</span>
