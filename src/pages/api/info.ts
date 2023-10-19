@@ -2,6 +2,8 @@ import { PackageManifest } from '@/hooks/useManifest'
 import { isEqual } from 'lodash'
 import { NextApiRequest, NextApiResponse } from 'next'
 
+const REGISTRY = 'https://registry.npmmirror.com'
+
 export default async function handler (
   req: NextApiRequest,
   res: NextApiResponse
@@ -9,10 +11,10 @@ export default async function handler (
   try {
     const { pkgName } = req.query
     const [pkg, sourceRegistryInfo] = await Promise.all([
-      fetch(`https://registry.npmmirror.com/${pkgName}`, {
+      fetch(`${REGISTRY}/${pkgName}`, {
         cache: 'no-store'
       }).then(res => res.json()),
-      fetch(`https://registry.npmjs.org/${pkgName}`, {
+      fetch(`${REGISTRY}/${pkgName}`, {
         cache: 'no-store',
         headers: {
           Accept: 'application/vnd.npm.install-v1+json'

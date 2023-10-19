@@ -78,9 +78,11 @@ function useDebounce (value: string, delay: number) {
   return debouncedValue
 }
 
+const REGISTRY = 'https://registry.npmmirror.com';
+
 async function fetcher ([k, p]: [string, number]){
   const res = await fetch(
-    `https://registry.npmmirror.com/-/v1/search?text=${k}&size=12&from=${
+    `${REGISTRY}/-/v1/search?text=${k}&size=12&from=${
       (p - 1) * 12
     }`,
     {

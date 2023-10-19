@@ -4,31 +4,58 @@ import { useRouter } from 'next/router'
 import styles from './token-news.module.css'
 import Link from 'next/link'
 
+const REGISTRY = 'http://127.0.0.1:7001'
+
 export default function NewTokens () {
   const [value, setValue] = useState('')
   const [inputVaule, setInputValue] = useState('')
+  const [password, setPassword] = useState('')
+  const [username, setUsername] = useState({})
   const router = useRouter()
 
-  const createToken = () => {
-    try {
-      let token = Date.now() //这个token的方法后续要换一个新的算法，暂时用这个代替
-      // 这个token的值应该存入数据库里，然后渲染的值都从数据库中获取
-      token
-        ? localStorage.setItem(
-            'access-token',
-            JSON.stringify({
-              token: `EPM_${value}_${inputVaule}_${token}`,
-              name: { inputVaule },
-              type: { value }
-            }) 
-          )
-        : null
-    } catch (e: any) {
-      console.error(e.message)
+  useEffect(() => {
+    let user = localStorage.getItem('user')
+    let password = user ? JSON.parse(user).password : null
+    let username = user ? JSON.parse(user).username : null
+    if (password) {
+      setPassword(password)
     }
+    if (username) {
+      setUsername(username)
+    }
+  }, [])
+
+  /**
+   * 保存用户生成的token
+   */
+  async function createToken () {
+    // 获取参数
+    let payload = {
+      password,
+      name: inputVaule,
+      randonly: false,
+      automation: false,
+      cidr_whitelist: null
+    }
+    value === 'Read-only'
+      ? (payload.randonly = true)
+      : (payload.randonly = false)
+    value === 'Automation'
+      ? (payload.automation = true)
+      : (payload.automation = false)
+    const tokenURL = `${REGISTRY}/-/npm/v1/tokens`
+    const response = await fetch(tokenURL, {
+      method: 'POST',
+      headers: {
+        ' Authorization': `Bearer ${username}`
+      },
+      body: JSON.stringify(payload)
+    })
+    const data = await response.json()
+    console.log(data, '-----------------')
     setTimeout(() => {
       router.push('/user/tokens')
-    })
+    }, 100)
   }
 
   return (
@@ -85,16 +112,6 @@ export default function NewTokens () {
                     two-factor authentication (2FA) when publishing. If you have
                     2FA enabled, you will not be prompted when using an
                     automation token, making it suitable for CI/CD workflows.
-                  </span>
-                </div>
-                <div>
-                  <Radio value={'Publish'}>
-                    <b>Publish</b>
-                  </Radio>
-                  <span>
-                    A publish token can read and publish packages to the npm
-                    registry. If you have 2FA enabled, it will be required when
-                    using this token.
                   </span>
                 </div>
               </Radio.Group>

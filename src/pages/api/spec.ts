@@ -2,6 +2,8 @@ import { PackageManifest } from '@/hooks/useManifest'
 import { isEqual } from 'lodash'
 import { NextApiRequest, NextApiResponse } from 'next'
 
+const REGISTRY = 'https://registry.npmmirror.com'
+
 export default async function handler (
   req: NextApiRequest,
   res: NextApiResponse
@@ -9,7 +11,7 @@ export default async function handler (
   try {
     const { pkgName, spec } = req.query
     const [pkg] = await Promise.all([
-      fetch(`https://registry.npmmirror.com/${pkgName}/${spec}`, {
+      fetch(`${REGISTRY}/${pkgName}/${spec}`, {
         cache: 'no-store'
       }).then(res => res.json())
     ])

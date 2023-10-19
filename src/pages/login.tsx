@@ -9,7 +9,11 @@ type FieldType = {
   password?: string
 }
 
+const REGISTRY = 'http://127.0.0.1:7001'
+
 export default function Login () {
+
+  // 这里直接去调一下后端的登录接口
   const router = useRouter()
   const [message, setMessage] = useState('')
   const [username, setUsername] = useState('')
@@ -27,7 +31,6 @@ export default function Login () {
       .then(res => res.json())
       .then(data => {
         if (data.status === 200) {
-          localStorage.setItem('token', data.data.accessToken)
           router.push('/')
         } else {
           setMessage('Password is not correct,Please check your password!!')

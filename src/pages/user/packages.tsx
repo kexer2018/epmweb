@@ -33,13 +33,13 @@ export default function UserPackage () {
       setUsername(username)
       getPackageDetails(username)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   /**
    * 获取user的包的信息，在package中展示
    */
   let packdetails: Array<PackType> = []
-
   async function getPackageName (username: string): Promise<string[]> {
     const packageUrl = `${register}/-/org/${username}/package`
     const data = await fetch(packageUrl, {
@@ -50,6 +50,9 @@ export default function UserPackage () {
 
   async function getPackageDetails (username: string) {
     const packages = await getPackageName(username)
+    if (packages.length === 1 && packages[0] === 'error') {
+      return
+    }
     const urls = packages.map(pack => (pack = `${register}/${pack}`))
     const fetchPromises = urls.map(url => fetch(url))
     const responses = await Promise.all(fetchPromises)

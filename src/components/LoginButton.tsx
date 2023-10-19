@@ -10,8 +10,6 @@ import {
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-
-
 export default function Login () {
   const [loggedIn, setLoggedIn] = useState(false)
   const [username, setUserName] = useState('')
@@ -19,14 +17,9 @@ export default function Login () {
 
   useEffect(() => {
     let user = localStorage.getItem('user')
-    let token = localStorage.getItem('token')
-    if (!token) {
-      setLoggedIn(false)
-    } else if (token && user) {
-      const username = JSON.parse(user)?.username
-      setUserName(username)
-      setLoggedIn(true)
-    }
+    user
+      ? (setUserName(JSON.parse(user)?.username), setLoggedIn(true))
+      : setLoggedIn(false)
   }, [])
 
   const items: MenuProps['items'] = [
