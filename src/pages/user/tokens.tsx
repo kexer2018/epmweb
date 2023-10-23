@@ -38,14 +38,15 @@ export default function UserTokens () {
     })
       .then(res => res.json())
       .then(data => {
-        const tokenArray: any = data.objects
+        const p: any = data.objects
         // 对数据进行处理
         let tokenRes: Array<DataSourceItem> = []
+        const tokenArray = p.filter((obj: any) => obj.manually === true)
         tokenArray.map((item: any, index: number) => {
           let obj = {
             key: index + 1,
             name: item.token,
-            type: 'readonly',
+            type: item.readonly ? 'readonly' : 'automation',
             token: item.key,
             created: moment(item.created).format('YYYY-MM-DD HH:mm:ss'),
             last_used: item.lastUsedAt
@@ -103,9 +104,8 @@ export default function UserTokens () {
         }
       })
     )
-    const responses = await Promise.all(fetchPromises as any)
-    const dataPromises = responses.map(response => response.json())
-    
+    await Promise.all(fetchPromises as any)
+    window.location.reload()
   }
   const rowSelection: TableRowSelection<DataSourceItem> = {
     selectedRowKeys,
