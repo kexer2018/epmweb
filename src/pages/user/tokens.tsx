@@ -24,80 +24,42 @@ const REGISTRY = 'http://127.0.0.1:7001'
 
 export default function UserTokens () {
   const [dataSource, setDataSource] = useState<DataSourceItem[]>()
-  // 读取token中的各种数据
+  const [tokenKey, setTokenKey] = useState<Array<number>>([])
+
+  // 读取token中的数据
   useEffect(() => {
     let token = localStorage.getItem('access-token')
-    token
-      ? fetch(`${REGISTRY}/-/npm/v1/tokens`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${JSON.parse(token)?.access_token}`
+    fetch(`${REGISTRY}/-/npm/v1/tokens`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        const tokenArray: any = data.objects
+        // 对数据进行处理
+        let tokenRes: Array<DataSourceItem> = []
+        tokenArray.map((item: any, index: number) => {
+          let obj = {
+            key: index + 1,
+            name: item.token,
+            type: 'readonly',
+            token: item.key,
+            created: moment(item.created).format('YYYY-MM-DD HH:mm:ss'),
+            last_used: item.lastUsedAt
+              ? moment(item.lastUsedAt).format('YYYY-MM-DD HH:mm:ss')
+              : ''
           }
+          tokenRes.push(obj)
         })
-          .then(res => res.json())
-          .then(data => {
-            const tokenArray: any = data.objects
-            // 对数据进行处理
-            let tokenRes: Array<DataSourceItem> = []
-            tokenArray.map((item: any, index: number) => {
-              let obj = {
-                key: index + 1,
-                name: item.token,
-                type: 'readonly',
-                token: item.key,
-                created: moment(item.created).format('YYYY-MM-DD HH:mm:ss'),
-                last_used: moment(item.lastUsedAt).format('YYYY-MM-DD HH:mm:ss')
-              }
-              tokenRes.push(obj)
-            })
-            console.log(tokenRes, '+++++++++')
-            setDataSource(tokenRes)
-          })
-      : null
+        setDataSource(tokenRes)
+      })
   }, [])
-
-  // token的信息从数据库中获取
-  // const [dataSource, setDataSource] = useState<DataSourceItem[]>([
-  //   {
-  //     key: '1',
-  //     name: 'John Brown',
-  //     token: '1222222',
-  //     type: 'read-only',
-  //     created: 'New York No. 1 Lake Park',
-  //     last_used: '2016-10-03'
-  //   },
-  //   {
-  //     key: '2',
-  //     name: 'John Brown',
-  //     type: 'read-only',
-  //     token: 'epm_11111',
-  //     created: 'New York No. 1 Lake Park',
-  //     last_used: '2016-10-05'
-  //   },
-  //   {
-  //     key: '3',
-  //     name: 'John Brown',
-  //     type: 'read-only',
-  //     token: '@333333s',
-  //     created: 'New York No. 1 Lake Park',
-  //     last_used: '2016-10-06'
-  //   },
-  //   {
-  //     key: '4',
-  //     name: 'John Brown',
-  //     type: 'read-only',
-  //     token: 'iopdddddd',
-  //     created: 'New York No. 1 Lake Park',
-  //     last_used: '2016-10-09'
-  //   }
-  // ])
 
   // 记录需要删除的键
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
-  const [name, setName] = useState('')
-  const [type, setType] = useState('')
-
   const columns = [
     {
       title: 'Name',
@@ -122,20 +84,35 @@ export default function UserTokens () {
     }
   ]
 
-  // 这个点击之后会触发一个 删除数据库中token值的方法
-  // const handleDeleteSelected = () => {
-  //   const updatedDataSource = dataSource.filter(
-  //     item => !selectedRowKeys.includes(item.key)
-  //   )
-  //   setDataSource(updatedDataSource)
-  //   setSelectedRowKeys([])
-  // }
-  // const rowSelection: TableRowSelection<DataSourceItem> = {
-  //   selectedRowKeys,
-  //   onChange: selectedRowKeys => {
-  //     setSelectedRowKeys(selectedRowKeys)
-  //   }
-  // }
+  //这个点击之后会触发一个 删除数据库中token值的方法
+  const handleDeleteSelected = async () => {
+    // 根据tokenKey 删除数据库中token值
+    let token = localStorage.getItem('access-token')
+    const needDeleteToken = dataSource?.filter(item => {
+      return selectedRowKeys.includes(item.key)
+    })
+    const urls = needDeleteToken?.map(
+      item => `${REGISTRY}/-/npm/v1/tokens/token/${item.token}`
+    )
+    const fetchPromises = urls?.map(url =>
+      fetch(url, {
+        method: 'DELETE',
+        headers: {
+          'content-type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      })
+    )
+    const responses = await Promise.all(fetchPromises as any)
+    const dataPromises = responses.map(response => response.json())
+    
+  }
+  const rowSelection: TableRowSelection<DataSourceItem> = {
+    selectedRowKeys,
+    onChange: selectedRowKeys => {
+      setSelectedRowKeys(selectedRowKeys)
+    }
+  }
   const [themeMode, setThemeMode] = useTheme()
   const userStyles = createStyles(({ css }) => {
     return {
@@ -155,7 +132,9 @@ export default function UserTokens () {
 
   const { styles } = userStyles()
   const router = useRouter()
-  const hasItem = false
+  // const hasItem =
+  const emptyDataMessage = <span>you have no tokens ,create one</span>
+
   return (
     <ThemeProvider themeMode={themeMode as ThemeMode}>
       <Space direction='vertical' style={{ width: '100%' }}>
@@ -185,7 +164,7 @@ export default function UserTokens () {
                 </Button>
                 <Button
                   size='large'
-                  // onClick={handleDeleteSelected}
+                  onClick={handleDeleteSelected}
                   disabled={selectedRowKeys.length === 0}
                 >
                   <span style={{ color: 'red' }}>Delete Selected Tokens</span>
@@ -193,16 +172,12 @@ export default function UserTokens () {
               </div>
             </div>
             <Divider />
-
-            {hasItem ? (
-              <span>you have no tokens ,create one</span>
-            ) : (
-              <Table<DataSourceItem>
-                // rowSelection={rowSelection}
-                columns={columns}
-                dataSource={dataSource}
-              />
-            )}
+            <Table<DataSourceItem>
+              rowSelection={rowSelection}
+              columns={columns}
+              dataSource={dataSource}
+              locale={{ emptyText: emptyDataMessage }}
+            />
           </div>
           <Divider />
           <Footer />

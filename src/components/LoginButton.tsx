@@ -10,6 +10,8 @@ import {
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
+const REGISTRY = 'http://127.0.0.1:7001'
+
 export default function Login () {
   const [loggedIn, setLoggedIn] = useState(false)
   const [username, setUserName] = useState('')
@@ -18,7 +20,16 @@ export default function Login () {
   useEffect(() => {
     let access_token = localStorage.getItem('access-token')
     access_token
-      ? (setUserName(JSON.parse(access_token)?.username), setLoggedIn(true))
+      ? (setLoggedIn(true),
+        // 根据 access_token拿到用户的信息
+        fetch(`${REGISTRY}/-/npm/v1/user`, {
+          headers: {
+            'content-type': 'application/json',
+            Authorization: `Bearer ${access_token}`
+          }
+        })
+          .then(res => res.json())
+          .then(data => setUserName(data.name)))
       : setLoggedIn(false)
   }, [])
 

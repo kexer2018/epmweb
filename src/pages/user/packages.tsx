@@ -12,7 +12,7 @@ import styles from './packages.module.css'
 const { Content } = Layout
 const ThemeProvider = _ThemeProvider as any
 
-const register = 'http://127.0.0.1:7001'
+const REGISTRY = 'http://127.0.0.1:7001'
 
 interface PackType {
   name: string
@@ -24,15 +24,36 @@ interface PackType {
 export default function UserPackage () {
   const [themeMode, setThemeMode] = useTheme()
   const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
   const [pack, setPackage] = useState<Array<PackType>>()
 
+  // useEffect(() => {
+  //   let user = localStorage.getItem('access-token')
+  //   let username = user ? JSON.parse(user).username : null
+  //   if (username) {
+  //     setUsername(username)
+  //     getPackageDetails(username)
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [])
+
   useEffect(() => {
-    let user = localStorage.getItem('access-token')
-    let username = user ? JSON.parse(user).username : null
-    if (username) {
-      setUsername(username)
-      getPackageDetails(username)
-    }
+    let access_token = localStorage.getItem('access-token')
+    access_token
+      ? // 根据 access_token拿到用户的信息
+        fetch(`${REGISTRY}/-/npm/v1/user`, {
+          headers: {
+            'content-type': 'application/json',
+            Authorization: `Bearer ${access_token}`
+          }
+        })
+          .then(res => res.json())
+          .then(data => {
+            setUsername(data.name)
+            setEmail(data.email)
+            getPackageDetails(data.name)
+          })
+      : null
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -41,7 +62,7 @@ export default function UserPackage () {
    */
   let packdetails: Array<PackType> = []
   async function getPackageName (username: string): Promise<string[]> {
-    const packageUrl = `${register}/-/org/${username}/package`
+    const packageUrl = `${REGISTRY}/-/org/${username}/package`
     const data = await fetch(packageUrl, {
       method: 'GET'
     })
@@ -53,7 +74,7 @@ export default function UserPackage () {
     if (packages.length === 1 && packages[0] === 'error') {
       return
     }
-    const urls = packages.map(pack => (pack = `${register}/${pack}`))
+    const urls = packages.map(pack => (pack = `${REGISTRY}/${pack}`))
     const fetchPromises = urls.map(url => fetch(url))
     const responses = await Promise.all(fetchPromises)
     const dataPromises = responses.map(response => response.json())
@@ -94,7 +115,7 @@ export default function UserPackage () {
                   <h1>{username}</h1>
                   <div>
                     <h3>Email</h3>
-                    <p>{username}@acoinfo.com</p>
+                    <p>{email}</p>
                   </div>
                   <div>
                     <h3>Scope</h3>

@@ -1,4 +1,4 @@
-import React, { useState} from 'react'
+import React, { useState } from 'react'
 import { Button, Form, Input, Image } from 'antd'
 import styles from './login.module.css'
 import Link from 'next/link'
@@ -35,10 +35,7 @@ export default function Login () {
       }
     )
     const p = await response.json()
-    localStorage.setItem(
-      'access-token',
-      JSON.stringify({ access_token: p.token, username })
-    )
+    localStorage.setItem('access-token', p.token)
     setTimeout(() => {
       router.push('/')
     }, 100)
