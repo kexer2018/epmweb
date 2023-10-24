@@ -26,17 +26,7 @@ export default function UserPackage () {
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [pack, setPackage] = useState<Array<PackType>>()
-
-  // useEffect(() => {
-  //   let user = localStorage.getItem('access-token')
-  //   let username = user ? JSON.parse(user).username : null
-  //   if (username) {
-  //     setUsername(username)
-  //     getPackageDetails(username)
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [])
-
+  
   useEffect(() => {
     let access_token = localStorage.getItem('access-token')
     access_token

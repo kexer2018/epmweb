@@ -45,9 +45,13 @@ export default function UserTokens () {
         tokenArray.map((item: any, index: number) => {
           let obj = {
             key: index + 1,
-            name: item.token,
-            type: item.readonly ? 'readonly' : 'automation',
-            token: item.key,
+            name: item.name,
+            type: item.readonly
+              ? 'readonly'
+              : item.automation
+              ? 'automation'
+              : '',
+            token: item.token,
             created: moment(item.created).format('YYYY-MM-DD HH:mm:ss'),
             last_used: item.lastUsedAt
               ? moment(item.lastUsedAt).format('YYYY-MM-DD HH:mm:ss')
@@ -82,6 +86,10 @@ export default function UserTokens () {
     {
       title: 'Last_used',
       dataIndex: 'last_used'
+    },
+    {
+      title: ' expiredAt',
+      dataIndex: 'expiredat'
     }
   ]
 

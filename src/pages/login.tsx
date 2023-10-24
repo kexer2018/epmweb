@@ -30,7 +30,6 @@ export default function Login () {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          
         },
         body: payload
       }

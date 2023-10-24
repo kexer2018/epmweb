@@ -8,21 +8,13 @@ const REGISTRY = 'http://127.0.0.1:7001'
 
 export default function NewTokens () {
   const [value, setValue] = useState('')
+  const [token, setToken] = useState('')
   const [inputVaule, setInputValue] = useState('')
-  const [password, setPassword] = useState('')
-  const [username, setUsername] = useState({})
   const router = useRouter()
 
   useEffect(() => {
-    let user = localStorage.getItem('user')
-    let password = user ? JSON.parse(user).password : null
-    let username = user ? JSON.parse(user).username : null
-    if (password) {
-      setPassword(password)
-    }
-    if (username) {
-      setUsername(username)
-    }
+    let token = localStorage.getItem('access-token')
+    token ? setToken(token) : null
   }, [])
 
   /**
@@ -31,7 +23,7 @@ export default function NewTokens () {
   async function createToken () {
     // 获取参数
     let payload = {
-      password,
+      password: '123456*',
       name: inputVaule,
       randonly: false,
       automation: false,
@@ -47,10 +39,11 @@ export default function NewTokens () {
     const response = await fetch(tokenURL, {
       method: 'POST',
       headers: {
-        ' Authorization': `Bearer ${username}`
+        ' Authorization': `Bearer ${token}`
       },
       body: JSON.stringify(payload)
     })
+    // epm_aNfItf2oTuFQitUZjdKpZMyl6blNr4Ut_2H4psT
     const data = await response.json()
     console.log(data, '-----------------')
     setTimeout(() => {
