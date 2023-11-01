@@ -78,7 +78,8 @@ function useDebounce (value: string, delay: number) {
   return debouncedValue
 }
 
-const REGISTRY = 'https://registry.npmmirror.com';
+// const REGISTRY = 'https://registry.npmmirror.com';
+const REGISTRY = 'http://127.0.0.1:7001';
 
 async function fetcher ([k, p]: [string, number]){
   const res = await fetch(

@@ -24,7 +24,7 @@ const REGISTRY = 'http://127.0.0.1:7001'
 
 export default function UserTokens () {
   const [dataSource, setDataSource] = useState<DataSourceItem[]>()
-  const [tokenKey, setTokenKey] = useState<Array<number>>([])
+  const [tokenKey, setTokenKey] = useState<Array<any>>([])
 
   // 读取token中的数据
   useEffect(() => {
@@ -39,6 +39,7 @@ export default function UserTokens () {
       .then(res => res.json())
       .then(data => {
         const p: any = data.objects
+        setTokenKey(p)
         // 对数据进行处理
         let tokenRes: Array<DataSourceItem> = []
         const tokenArray = p.filter((obj: any) => obj.manually === true)
@@ -100,9 +101,17 @@ export default function UserTokens () {
     const needDeleteToken = dataSource?.filter(item => {
       return selectedRowKeys.includes(item.key)
     })
-    const urls = needDeleteToken?.map(
-      item => `${REGISTRY}/-/npm/v1/tokens/token/${item.token}`
-    )
+
+    // 需要根据选中的token名找出对应的tokenKey
+    const keys: string[] = []
+    needDeleteToken?.forEach(obj2 => {
+      const name = obj2.name
+      const matchingObj = tokenKey.find(obj => obj.name === name)
+      if (matchingObj) {
+        keys.push(matchingObj.key)
+      }
+    })
+    const urls = keys?.map(item => `${REGISTRY}/-/npm/v1/tokens/token/${item}`)
     const fetchPromises = urls?.map(url =>
       fetch(url, {
         method: 'DELETE',

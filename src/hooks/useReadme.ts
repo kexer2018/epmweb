@@ -1,6 +1,7 @@
 'use client';
 import useSwr from 'swr';
-const REGISTRY = 'https://registry.npmmirror.com';
+// const REGISTRY = 'https://registry.npmmirror.com';
+const REGISTRY = 'http://127.0.0.1:7001';
 export function useReadme(pkgName: string, version = 'latest') {
   const { data: content } = useSwr(pkgName ? pkgName + version : null, {
     fetcher: async () => {

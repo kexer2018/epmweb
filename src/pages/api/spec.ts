@@ -2,7 +2,8 @@ import { PackageManifest } from '@/hooks/useManifest'
 import { isEqual } from 'lodash'
 import { NextApiRequest, NextApiResponse } from 'next'
 
-const REGISTRY = 'https://registry.npmmirror.com'
+// const REGISTRY = 'https://registry.npmmirror.com'
+const REGISTRY = 'http://127.0.0.1:7001';
 
 export default async function handler (
   req: NextApiRequest,

@@ -7,7 +7,8 @@ import Sync from "./Sync";
 const NPM_REGISTRY = 'https://npmjs.com';
 
 export const REGISTRY_MAP = {
-  self: 'https://registry.npmmirror.com',
+  // self: 'https://registry.npmmirror.com',
+  self: 'http://127.0.0.1:7001',
   default: 'https://registry.npmjs.org',
 };
 

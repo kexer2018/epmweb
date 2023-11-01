@@ -23,15 +23,14 @@ export default function NewTokens () {
   async function createToken () {
     // 获取参数
     let payload = {
-      password: '123456*',
       name: inputVaule,
-      randonly: false,
+      readonly: false,
       automation: false,
-      cidr_whitelist: null
+      manually: true
     }
     value === 'Read-only'
-      ? (payload.randonly = true)
-      : (payload.randonly = false)
+      ? (payload.readonly = true)
+      : (payload.readonly = false)
     value === 'Automation'
       ? (payload.automation = true)
       : (payload.automation = false)
@@ -39,13 +38,13 @@ export default function NewTokens () {
     const response = await fetch(tokenURL, {
       method: 'POST',
       headers: {
-        ' Authorization': `Bearer ${token}`
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify(payload)
     })
-    // epm_aNfItf2oTuFQitUZjdKpZMyl6blNr4Ut_2H4psT
-    const data = await response.json()
-    console.log(data, '-----------------')
+    
+    console.log(await response.json(),'----------------->')
     setTimeout(() => {
       router.push('/user/tokens')
     }, 100)
