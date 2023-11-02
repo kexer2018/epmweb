@@ -43,8 +43,13 @@ export default function NewTokens () {
       },
       body: JSON.stringify(payload)
     })
-    
-    console.log(await response.json(),'----------------->')
+
+    // 传给展示页面token值
+    const data = await response.json()
+    // const tokenData = {
+    //   name: data.name,
+    //   token: data.token
+    // }
     setTimeout(() => {
       router.push('/user/tokens')
     }, 100)
@@ -84,9 +89,12 @@ export default function NewTokens () {
               &nbsp;
             </p>
             <div className={styles.select}>
-              <Radio.Group onChange={e => setValue(e.target.value)}>
+              <Radio.Group
+                style={{ color: 'initial' }}
+                onChange={e => setValue(e.target.value)}
+              >
                 <div>
-                  <Radio value={'Read-only'}>
+                  <Radio style={{ color: 'initial' }} value={'Read-only'}>
                     <b>Read-only</b>
                   </Radio>
                   <span>
@@ -96,7 +104,7 @@ export default function NewTokens () {
                 </div>
                 <br />
                 <div>
-                  <Radio value={'Automation'}>
+                  <Radio style={{ color: 'initial' }} value={'Automation'}>
                     <b>Automation</b>
                   </Radio>
                   <span>

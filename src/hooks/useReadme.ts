@@ -7,9 +7,9 @@ export function useReadme(pkgName: string, version = 'latest') {
     fetcher: async () => {
       const keys = [
         'README.md',
-        'README',
+        // 'README',
         'readme.md',
-        'readme',
+        // 'readme',
       ];
       return Promise.all(
         keys.map(async (key) => {

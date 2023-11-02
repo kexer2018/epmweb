@@ -4,6 +4,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 
 // const REGISTRY = 'https://registry.npmmirror.com'
 const REGISTRY = 'http://127.0.0.1:7001';
+const SOURCEREGISTRY = 'https://registry.npmjs.org'
 
 export default async function handler (
   req: NextApiRequest,
@@ -15,7 +16,7 @@ export default async function handler (
       fetch(`${REGISTRY}/${pkgName}`, {
         cache: 'no-store'
       }).then(res => res.json()),
-      fetch(`${REGISTRY}/${pkgName}`, {
+      fetch(`${SOURCEREGISTRY}/${pkgName}`, {
         cache: 'no-store',
         headers: {
           Accept: 'application/vnd.npm.install-v1+json'

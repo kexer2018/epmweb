@@ -25,6 +25,7 @@ const REGISTRY = 'http://127.0.0.1:7001'
 export default function UserTokens () {
   const [dataSource, setDataSource] = useState<DataSourceItem[]>()
   const [tokenKey, setTokenKey] = useState<Array<any>>([])
+  const router = useRouter()
 
   // 读取token中的数据
   useEffect(() => {
@@ -122,7 +123,7 @@ export default function UserTokens () {
       })
     )
     await Promise.all(fetchPromises as any)
-    window.location.reload()
+    router.reload()
   }
   const rowSelection: TableRowSelection<DataSourceItem> = {
     selectedRowKeys,
@@ -148,10 +149,7 @@ export default function UserTokens () {
   })
 
   const { styles } = userStyles()
-  const router = useRouter()
-  // const hasItem =
-  const emptyDataMessage = <span>you have no tokens ,create one</span>
-
+  const emptyDataMessage = <span>you have no token ,create one</span>
   return (
     <ThemeProvider themeMode={themeMode as ThemeMode}>
       <Space direction='vertical' style={{ width: '100%' }}>
@@ -189,6 +187,8 @@ export default function UserTokens () {
               </div>
             </div>
             <Divider />
+            {/* {createdToken ? <span>{createdToken}</span> : null} */}
+
             <Table<DataSourceItem>
               rowSelection={rowSelection}
               columns={columns}

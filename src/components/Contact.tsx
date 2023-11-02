@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { List } from 'antd'
 import styles from './Contact.module.css'
 
-const DataUrl = 'https://registry.npmmirror.com/'
+// const DataUrl = 'https://registry.npmmirror.com/'
+const dataUrl = 'http://127.0.0.1:7001'
 const data = [
   'total packages',
   'total versions',
@@ -19,7 +20,7 @@ export default function Contact () {
   const [value, setValues] = useState<any>(null)
 
   useEffect(() => {
-    fetch(DataUrl, {
+    fetch(dataUrl, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'

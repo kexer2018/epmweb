@@ -78,7 +78,8 @@ export default function UserPackage () {
       }
       packdetails.push(p)
     })
-    setPackage(packdetails)
+    const resPack = packdetails.filter(item => item.latest !== undefined)
+    setPackage(resPack)
   }
 
   return (
