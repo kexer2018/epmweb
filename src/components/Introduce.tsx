@@ -11,7 +11,7 @@ export default function Introduce () {
   const [loggedIn, setLoggedIn] = useState(false)
 
   useEffect(() => {
-    let token = localStorage.getItem('token')
+    let token = localStorage.getItem('access-token')
     token ? setLoggedIn(true) : setLoggedIn(false)
   }, [])
 

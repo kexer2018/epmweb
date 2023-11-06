@@ -5,9 +5,9 @@ import moment from 'moment'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { useTheme } from '@/hooks/useTheme'
-import { createStyles } from 'antd-style'
 import { useRouter } from 'next/router'
 import { TableRowSelection } from 'antd/lib/table/interface'
+import styles from './tokens.module.css'
 
 const ThemeProvider = _ThemeProvider as any
 
@@ -132,24 +132,9 @@ export default function UserTokens () {
     }
   }
   const [themeMode, setThemeMode] = useTheme()
-  const userStyles = createStyles(({ css }) => {
-    return {
-      container: css`
-        width: 1170px;
-        min-width: 960px;
-        padding-left: 15px;
-        padding-right: 15px;
-        margin-left: auto;
-        margin-right: auto;
-        display: flex;
-        flex-direction: column;
-        background-color: transparent !important;
-      `
-    }
-  })
-
-  const { styles } = userStyles()
   const emptyDataMessage = <span>you have no token ,create one</span>
+
+
   return (
     <ThemeProvider themeMode={themeMode as ThemeMode}>
       <Space direction='vertical' style={{ width: '100%' }}>
@@ -187,8 +172,6 @@ export default function UserTokens () {
               </div>
             </div>
             <Divider />
-            {/* {createdToken ? <span>{createdToken}</span> : null} */}
-
             <Table<DataSourceItem>
               rowSelection={rowSelection}
               columns={columns}

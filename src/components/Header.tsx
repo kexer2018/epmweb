@@ -4,11 +4,7 @@ import { useCachedSearch } from '@/hooks/useSearch'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import Login from './LoginButton'
-import { createStyles } from 'antd-style'
-
-interface HeaderProps {
-  onDataReceived: (data: any) => void
-}
+import styles from './Header.module.css'
 
 export default function Header ({ themeMode, setThemeMode, isHome }: any) {
   const [search, setSearch] = useState('')
@@ -21,22 +17,6 @@ export default function Header ({ themeMode, setThemeMode, isHome }: any) {
   const { data: searchResult, isLoading } = useCachedSearch({
     keyword: search,
     page: 1
-  })
-
-  const userStyles = createStyles(({ css }) => {
-    return {
-      container: css`
-        position: relative;
-        width: 100%;
-        height: 5rem;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        top: 30px;
-        margin-bottom: 30px;
-      `
-    }
   })
 
   const options = React.useMemo(() => {
@@ -59,7 +39,6 @@ export default function Header ({ themeMode, setThemeMode, isHome }: any) {
     }))
   }, [searchResult])
 
-  const { styles } = userStyles()
   return (
     <nav className={styles.container}>
       <Image
